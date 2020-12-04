@@ -1,9 +1,9 @@
-=Refn= is a Clojurescript library to mutate and manage  resultsets in
+=Refn= is a Clojurescript library to mutate and manage resultsets in
 the re-frame appdb
 
 It is at times convenient to have a snapshot of the Remote database
 for CRUD operations in the Reframe App DB. Typically, we end up having a
-huge catalog of effects and subscriptions for various entities and the
+huge catalog of events, effects and subscriptions for various entities and the
 CRUD operations associated with it. Having a common =sub= (:resultset)
 avoids the need to write explicit subscriptions that could otherwise
 get very tedious and repetitive.
