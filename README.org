@@ -16,6 +16,14 @@ when deleting from remote db, handles list pagination and so forth.
 
 * Basic Usage
 
+Add following to deps.edn or your cljs deps file
+#+begin_src clojure
+{:deps {omnyway-labs/refn
+        {:git/url "https://github.com/omnyway-labs/refn.git"
+         :sha "256763ee623755b3ae97b622759d8b561227b98b"}}}
+#+end_src
+
+
 ** Initializing
 
 #+BEGIN_SRC clojure
