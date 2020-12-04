@@ -64,7 +64,7 @@ And now we can just subscribe to the entity in the resultset
 (rf/subscribe [:resultset entity])
 ;; e.g
 (rf/subscribe [:resultset :foo])
-END_SRC
+#+END_SRC
 
 =:list= operation appends to the resultset collection in the appdb
 
