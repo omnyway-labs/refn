@@ -8,7 +8,7 @@ CRUD operations associated with it. Having a common =sub= (:resultset)
 avoids the need to write explicit subscriptions that could otherwise
 get very tedious and repetitive.
 
-=Refn library provides an utility function called =refn= that can be used as callback
+=Refn= library provides an utility function called =refn= that can be used as callback
 function for various CRUD ops. =refn= manages the state of the
 =:resultset= value in the appdb: adds to it on create, deletes from it
 when deleting from remote db, handles list pagination and so forth.
