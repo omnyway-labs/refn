@@ -30,7 +30,8 @@ when deleting from remote db, handles list pagination and so forth.
 #+END_SRC
 
 Here =operation= is any of =:create=, =:update=, =:delete= or =:list=.
-=entity= is any keyword representing the database table or entity.
+=entity= is any keyword representing the database table or key to
+subscribe to.
 
 #+BEGIN_SRC clojure
 (ns myapp.events
@@ -55,10 +56,9 @@ And now we can just subscribe to the entity in the resultset
 (rf/subscribe [:resultset entity])
 ;; e.g
 (rf/subscribe [:resultset :foo])
-#+END_SRC
+END_SRC
 
-Similarly, the following appends to the resultset collection in the
-appdb
+=:list= operation appends to the resultset collection in the appdb
 
 #+begin_src clojure
 (rf/reg-fx ::list-foo
@@ -66,7 +66,7 @@ appdb
     (list-db-entity :foo (refn :list :foo))))
 #+end_src
 
-Deleting removes it from the local appdb. By default, it uses the
+=:delete= removes it from the local appdb. By default, it uses the
 =:id= key in the record to dissoc from the list in the appdb.
 
 #+begin_src clojure
