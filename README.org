@@ -23,7 +23,6 @@ Add following to deps.edn or your cljs deps file
          :sha "256763ee623755b3ae97b622759d8b561227b98b"}}}
 #+end_src
 
-
 ** Initializing
 
 #+BEGIN_SRC clojure
@@ -129,6 +128,22 @@ way to trace through events or effects.
 
 (<< [:baz some-value])
 #+END_SRC
+
+=defsub= also has a syntactic shortform to subscribe to top-level keys in the
+appdb
+
+#+begin_src clojure
+(defsub :foo)
+
+;; is equivalent to
+(rf/reg-sub
+ :foo
+ (fn [db _]
+   (:foo db)))
+
+#+end_src
+
+
 
 
 * License - Apache 2.0
