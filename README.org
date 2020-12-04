@@ -1,7 +1,7 @@
-=Refn= is a clojurescript library to mutate resultsets in the re-frame appdb
+=Refn= is a Clojurescript library to mutate resultsets in the re-frame appdb
 
 It is at times convenient to have a snapshot of the Remote database
-for CRUD operations in the Reframe App DB. However, we end up having a
+for CRUD operations in the Reframe App DB. Typically, we end up having a
 huge catalog of effects and subscriptions for various entities and the
 CRUD operations associated with it. Having a common =sub= (:resultset)
 avoids the need to write explicit subscriptions that could otherwise
@@ -11,7 +11,7 @@ get very tedious and repetitive.
 function for various CRUD ops. =refn= manages the state of the
 =:resultset= value in the app-db: adds to it on create, deletes from it
 when deleting from remote db, handles list pagination and so forth.
-=refn= returns a partial that takes arbitrary data as args
+=refn= returns a partial that takes a collection as param.
 
 * Basic Usage
 
@@ -20,9 +20,6 @@ when deleting from remote db, handles list pagination and so forth.
 #+BEGIN_SRC clojure
 (ns myapp.core
   (:require [refn.core :as refn]))
-
-(refn/init! {:app-name "myapp"
-              :some-config :baz})
 #+END_SRC
 
 ** Working with resultsets
@@ -80,7 +77,7 @@ Deleting removes it from the local appdb. By default, it uses the
 ** re-frame syntactic sugar
 
 Refn library also provides syntactic wrappers for defining,
-subscribing re-frame events. These are mostly to reduce boilerplate.
+subscribing re-frame events.
 
 *** Defining re-frame Events
 
