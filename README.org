@@ -1,0 +1,115 @@
+re-frame library to do CRUD on resultsets or collections
+
+* Basic Usage
+
+** Initializing
+
+#+BEGIN_SRC clojure
+(ns myapp.core
+  (:require [refn.core :as refn]))
+
+(refn/init! {:app-name "myapp"
+              :some-config :baz})
+#+END_SRC
+
+** Defining Reframe Events
+
+#+BEGIN_SRC clojure
+
+(ns myppp.events
+ (:require [refn.core :refer [defx]]))
+
+(defx ::foo (fn [param] (do-something param)))
+
+;; and elsewhere
+(ns myapp.views
+  (:require [myapp.events :as events]
+            [refn.core :refer [>>]]))
+
+(>> [::events/foo some-value])
+#+END_SRC
+
+=defx= is meant for side-effecting events, typically done using =reg-fx=
+without needing an intermediate =reg-event-fx= to dispatch to it.
+It's main purpose is to reduce boilerplate code and provide a quick
+way to trace through events or effects.
+
+** Defining Subscriptions
+
+#+BEGIN_SRC clojure
+(ns myppp.subs
+ (:require [refn.core :refer [defsub]]))
+
+(defsub :baz
+  (fn [db param]
+    (do-something param)))
+
+;; and elsewhere
+(ns myapp.views
+  (:require [myapp.subs :as subs]
+            [refn.core :refer [<<]]))
+
+(<< [:baz some-value])
+#+END_SRC
+
+** Working with resultsets
+
+It is at times convenient to have a snapshot of the Remote database
+for CRUD operations in the Reframe App DB. However, we end up having a
+huge catalog of effects and subscriptions for various entities and the
+CRUD operations associated with it. Having a common =sub= (:resultset)
+avoids the need to write explicit subscriptions that could otherwise
+get very tedious and repetitive.
+
+=refn= provides a function called =refn= that can be used as callback
+function for various CRUD ops. =refn= manages the state of the
+=:resultset= value in the app-db: adds to it on create, deletes from it
+when deleting from remote db, handles list pagination and so forth.
+=refn= returns a partial that takes arbitrary data as args
+
+
+#+BEGIN_SRC clojure
+(refn operation entity data)
+#+END_SRC
+
+Here =operation= is any of =:create=, =:update=, =:delete= or =:list=.
+=entity= is any keyword representing the database table or entity.
+
+#+BEGIN_SRC clojure
+(ns myapp.events
+  (:require
+   [refn.core :refer [refn defx]]))
+
+(defx ::create-foo
+  (fn [param]
+    (create-db-entity :foo param
+                      (refn :create :foo))))
+
+(defx ::list-foo
+  (fn [param]
+    (list-db-entity :foo (refn :list :foo))))
+
+#+END_SRC
+
+And now we can just subscribe to the entity in the resultset
+
+#+BEGIN_SRC clojure
+(<< [:resultset entity])
+(<< [:resultset :foo])
+#+END_SRC
+
+* License - Apache 2.0
+
+Copyright 2020-21 Omnyway Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+[[http://www.apache.org/licenses/LICENSE-2.0]]
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
