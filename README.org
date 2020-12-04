@@ -1,4 +1,17 @@
-re-frame library to do CRUD on resultsets or collections
+=Refn= is a clojurescript library to mutate resultsets in the re-frame appdb
+
+It is at times convenient to have a snapshot of the Remote database
+for CRUD operations in the Reframe App DB. However, we end up having a
+huge catalog of effects and subscriptions for various entities and the
+CRUD operations associated with it. Having a common =sub= (:resultset)
+avoids the need to write explicit subscriptions that could otherwise
+get very tedious and repetitive.
+
+=Refn library provides a function called =refn= that can be used as callback
+function for various CRUD ops. =refn= manages the state of the
+=:resultset= value in the app-db: adds to it on create, deletes from it
+when deleting from remote db, handles list pagination and so forth.
+=refn= returns a partial that takes arbitrary data as args
 
 * Basic Usage
 
@@ -12,12 +25,69 @@ re-frame library to do CRUD on resultsets or collections
               :some-config :baz})
 #+END_SRC
 
-** Defining Reframe Events
+** Working with resultsets
+
+#+BEGIN_SRC clojure
+(refn operation entity data)
+#+END_SRC
+
+Here =operation= is any of =:create=, =:update=, =:delete= or =:list=.
+=entity= is any keyword representing the database table or entity.
+
+#+BEGIN_SRC clojure
+(ns myapp.events
+  (:require
+   [re-frame.core :as rf]
+   [refn.core :refer [refn defx]]))
+
+(rf/reg-fx ::create-foo
+  (fn [param]
+    (create-db-entity :foo
+                      param
+                      (refn :create :foo))))
+#+END_SRC
+
+=(refn :create :foo)= returns a fn that can be used as a callback-fn
+typically in most cljs db queries or REST api requests.
+
+And now we can just subscribe to the entity in the resultset
+
+#+BEGIN_SRC clojure
+(rf/dispatch ::events/create-foo param)
+(rf/subscribe [:resultset entity])
+;; e.g
+(rf/subscribe [:resultset :foo])
+#+END_SRC
+
+Similarly, the following appends to the resultset collection in the
+appdb
+
+#+begin_src clojure
+(rf/reg-fx ::list-foo
+  (fn [param]
+    (list-db-entity :foo (refn :list :foo))))
+#+end_src
+
+Deleting removes it from the local appdb. By default, it uses the
+=:id= key in the record to dissoc from the list in the appdb.
+
+#+begin_src clojure
+(rf/reg-fx ::delete-foo
+  (fn [param]
+    (delete-db-entity :foo (refn :delete :foo))))
+#+end_src
+
+** re-frame syntactic sugar
+
+Refn library also provides syntactic wrappers for defining,
+subscribing re-frame events. These are mostly to reduce boilerplate.
+
+*** Defining re-frame Events
 
 #+BEGIN_SRC clojure
 
 (ns myppp.events
- (:require [refn.core :refer [defx]]))
+ (:require [refn.core :refer [defx >> <<]]))
 
 (defx ::foo (fn [param] (do-something param)))
 
@@ -34,7 +104,9 @@ without needing an intermediate =reg-event-fx= to dispatch to it.
 It's main purpose is to reduce boilerplate code and provide a quick
 way to trace through events or effects.
 
-** Defining Subscriptions
+=>>= and =<<= are shortforms for rf/dispatch and rf/subscribe
+
+*** Defining Subscriptions
 
 #+BEGIN_SRC clojure
 (ns myppp.subs
@@ -52,51 +124,6 @@ way to trace through events or effects.
 (<< [:baz some-value])
 #+END_SRC
 
-** Working with resultsets
-
-It is at times convenient to have a snapshot of the Remote database
-for CRUD operations in the Reframe App DB. However, we end up having a
-huge catalog of effects and subscriptions for various entities and the
-CRUD operations associated with it. Having a common =sub= (:resultset)
-avoids the need to write explicit subscriptions that could otherwise
-get very tedious and repetitive.
-
-=refn= provides a function called =refn= that can be used as callback
-function for various CRUD ops. =refn= manages the state of the
-=:resultset= value in the app-db: adds to it on create, deletes from it
-when deleting from remote db, handles list pagination and so forth.
-=refn= returns a partial that takes arbitrary data as args
-
-
-#+BEGIN_SRC clojure
-(refn operation entity data)
-#+END_SRC
-
-Here =operation= is any of =:create=, =:update=, =:delete= or =:list=.
-=entity= is any keyword representing the database table or entity.
-
-#+BEGIN_SRC clojure
-(ns myapp.events
-  (:require
-   [refn.core :refer [refn defx]]))
-
-(defx ::create-foo
-  (fn [param]
-    (create-db-entity :foo param
-                      (refn :create :foo))))
-
-(defx ::list-foo
-  (fn [param]
-    (list-db-entity :foo (refn :list :foo))))
-
-#+END_SRC
-
-And now we can just subscribe to the entity in the resultset
-
-#+BEGIN_SRC clojure
-(<< [:resultset entity])
-(<< [:resultset :foo])
-#+END_SRC
 
 * License - Apache 2.0
 
