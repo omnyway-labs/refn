@@ -4,9 +4,9 @@ the re-frame appdb
 It is at times convenient to have a snapshot of the remote database
 for CRUD operations in the re-frame appdb. Typically, we end up having a
 huge catalog of events, effects and subscriptions for various entities and the
-CRUD operations associated with it. Having a common =sub= (:resultset)
-avoids the need to write explicit subscriptions that could otherwise
-get very tedious and repetitive.
+CRUD operations associated with it. Having a common =sub= tree, with a
+top-level resultset key (say :resultset), avoids the need to write
+explicit subscriptions that could otherwise get very tedious and repetitive.
 
 =Refn= library provides an utility function called =refn= that can be used as callback
 function for various CRUD ops. =refn= manages the state of the
