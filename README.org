@@ -23,8 +23,6 @@ Add following to deps.edn or your cljs deps file
          :sha "256763ee623755b3ae97b622759d8b561227b98b"}}}
 #+end_src
 
-** Initializing
-
 #+BEGIN_SRC clojure
 (ns myapp.core
   (:require [refn.core :as refn]))
