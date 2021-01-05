@@ -124,7 +124,7 @@
 
 (rf/reg-event-db
  :initialize-db
- (fn-traced [_ _] default))
+ (fn [_ _] default))
 
 (rf/reg-event-db
  :set-defaults
