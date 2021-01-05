@@ -20,7 +20,7 @@ Add following to deps.edn or your cljs deps file
 #+begin_src clojure
 {:deps {omnyway-labs/refn
         {:git/url "https://github.com/omnyway-labs/refn.git"
-         :sha "256763ee623755b3ae97b622759d8b561227b98b"}}}
+         :sha "c0653d31fc55b3ae6638887647b12b2576465e36"}}}
 #+end_src
 
 #+BEGIN_SRC clojure
