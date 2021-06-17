@@ -1,0 +1,19 @@
+/out/
+/target/
+/*-init.clj
+/*.log
+/.cpcache/
+.DS_Store
+.*.icloud
+.#*
+
+# Leiningen
+/.lein-*
+/.nrepl-port
+
+# Node.js dependencies
+/node_modules/
+
+# shadow-cljs cache, port files
+/.shadow-cljs/
+
