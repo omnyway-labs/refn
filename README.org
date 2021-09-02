@@ -1,5 +1,5 @@
-=Refn= is a Clojurescript library to mutate and manage resultsets in
-the re-frame appdb
+=Refn= Clojurescript library to mutate and manage resultsets in
+the re-frame appdb + Re-frame syntactic Sugar Sprinkles
 
 It is at times convenient to have a snapshot of the remote database
 for CRUD operations in the re-frame appdb. Typically, we end up having a
@@ -14,7 +14,18 @@ function for various CRUD ops. =refn= manages the state of the
 when deleting from remote db, handles list pagination and so forth.
 =refn= returns a partial that takes a collection as param.
 
-* Basic Usage
+** Re-Frame Syntactic Sugar
+Not coupled to the =refn= functions, this library adds some nice syntactic sugar for your regular operations with re-frame events and subs.
+
+** Generate docs
+   Run
+   #+BEGIN_SRC bash
+   make codox
+   #+END_SRC
+
+   This will generate Codox documentation of the code in =api-docs=
+   
+* Deps and Requires
 
 Add following to deps.edn or your cljs deps file
 #+begin_src clojure
@@ -28,7 +39,7 @@ Add following to deps.edn or your cljs deps file
   (:require [refn.core :as refn]))
 #+END_SRC
 
-** Working with resultsets
+* Refn: Working with resultsets
 
 #+BEGIN_SRC clojure
 (refn operation entity data)
@@ -80,12 +91,12 @@ And now we can just subscribe to the entity in the resultset
     (delete-db-entity :foo (refn :delete :foo))))
 #+end_src
 
-** re-frame syntactic sugar
+* Re-Frame Syntactic Sugar
 
 Refn library also provides syntactic wrappers for defining,
 subscribing re-frame events.
 
-*** Defining re-frame Events
+** Defining re-frame Events
 
 #+BEGIN_SRC clojure
 
@@ -109,7 +120,7 @@ way to trace through events or effects.
 
 =>>= and =<<= are shortforms for rf/dispatch and rf/subscribe
 
-*** Defining Subscriptions
+** Defining Subscriptions
 
 #+BEGIN_SRC clojure
 (ns myppp.subs
@@ -141,9 +152,27 @@ appdb
 
 #+end_src
 
+=defub= Can also simplify subs that require a keypath to access the app-db
+#+begin_src clojure
+(defsub :foo [:bar :baz])
 
+;; is equivalent to
+(rf/reg-sub
+ :foo
+ (fn [db _]
+   (get-in db [:bar :baz)))
 
+#+end_src
 
+** Other sweet syntactic options
+   See the Codox or the code for the descriptions of
+   - =assoc-db=
+   - =assoc-in-db=
+   - =conj-in=
+   - =default=
+   - =dissoc-in=
+   - =init!=
+     
 * License - Apache 2.0
 
 Copyright 2020-21 Omnyway Inc.

@@ -1,14 +1,14 @@
 {:aliases
  {:dev
   {:extra-deps
-   {thheller/shadow-cljs       {:mvn/version "2.14.5"}}
+   {thheller/shadow-cljs       {:mvn/version "2.15.8"}}
    :extra-paths ["test" "src"]}}
  :deps
  {org.clojure/clojurescript
   {:exclusions  [com.google.javascript/closure-compiler-unshaded
                  org.clojure/google-closure-library
                  org.clojure/google-closure-library-third-party]
-   :mvn/version "1.10.866"}
+   :mvn/version "1.10.879"}
   re-frame/re-frame                    {:mvn/version "1.2.0"}
   reagent/reagent                     {:mvn/version "1.1.0"}}
  :paths ["src"]}

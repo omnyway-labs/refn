@@ -7,6 +7,9 @@
 .*.icloud
 .#*
 
+# Codox output
+/api-docs/
+
 # Leiningen
 /.lein-*
 /.nrepl-port

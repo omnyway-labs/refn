@@ -187,7 +187,8 @@
   - If the second argument `accessor` is a keyword,
       it is used as key to retrieve from the app-db  
   - If the second argument `accessor` is a function,
-      it is used as the function with the arguments of the app-db and the param in implicitly"
+      it is used as the function for the `reg-sub` with the arguments being the app-db and the param passed in implicitly  
+  - If the second argument is a vector, the vector will be passed in as the accessor path to `(get-in db)`"
   ([sub-id] (defsub sub-id (keyword (name sub-id))))
   ([sub-id accessor]
    (let [acc (if (keyword? accessor)
